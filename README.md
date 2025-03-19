@@ -78,6 +78,12 @@ public class SegregacaoDeInterfaces {
 }
 ```
 
+**Explicação**
+- Interfaces Divididas: As funcionalidades de impressão e escaneamento são separadas em diferentes interfaces (`Impressora` e `Scanner`).
+- Implementação Direta: A classe `ImpressoraSimples` implementa somente a interface relacionada à impressão, sem precisar lidar com métodos de escaneamento.
+- Flexibilidade: A classe `Multifuncional` pode implementar ambas as interfaces, oferecendo mais funcionalidades.
+<br>
+
 **D - Dependency Inversion Principle (DIP)** <br>
 Dependa de abstrações, não de implementações.
 Componentes de alto nível não devem depender de componentes de baixo nível diretamente. Ambos devem depender de abstrações.
