@@ -1,5 +1,5 @@
 # SOLID
-## Documentação e exemplos sobre os princípios SOLID.
+## Documentação e exemplos sobre os princípios SOLID
 <br>
 
 **SOLID** é um conjunto de cinco princípios de design de software que ajudam a criar sistemas mais robustos, legíveis e fáceis de manter. <br>
@@ -30,6 +30,53 @@ As classes não devem ser forçadas a implementar interfaces que elas não utili
 Em vez de criar uma única interface grande, divida-a em interfaces menores e mais específicas.
 
 Exemplo: Uma classe de impressora não deve precisar implementar métodos para escaneamento se ela não for um scanner.
+<br>
+
+```java
+// Interface para funcionalidades de impressão
+interface Impressora {
+    void imprimir(String documento);
+}
+
+// Interface para funcionalidades de escaneamento
+interface Scanner {
+    void escanear(String documento);
+}
+
+// Classe que implementa apenas a funcionalidade de impressão
+class ImpressoraSimples implements Impressora {
+    @Override
+    public void imprimir(String documento) {
+        System.out.println("Imprimindo: " + documento);
+    }
+}
+
+// Classe que implementa ambas as funcionalidades: impressão e escaneamento
+class Multifuncional implements Impressora, Scanner {
+    @Override
+    public void imprimir(String documento) {
+        System.out.println("Imprimindo: " + documento);
+    }
+
+    @Override
+    public void escanear(String documento) {
+        System.out.println("Escaneando: " + documento);
+    }
+}
+
+public class SegregacaoDeInterfaces {
+    public static void main(String[] args) {
+        // Usando uma impressora simples
+        Impressora impressora = new ImpressoraSimples();
+        impressora.imprimir("Relatório financeiro");
+
+        // Usando uma multifuncional (impressora + scanner)
+        Multifuncional multifuncional = new Multifuncional();
+        multifuncional.imprimir("Contrato");
+        multifuncional.escanear("Documento de identidade");
+    }
+}
+```
 
 **D - Dependency Inversion Principle (DIP)** <br>
 Dependa de abstrações, não de implementações.
