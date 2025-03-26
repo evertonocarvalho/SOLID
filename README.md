@@ -97,6 +97,84 @@ O software deve estar aberto para extensão, mas fechado para modificação.
 Isso significa que você pode adicionar novas funcionalidades sem alterar o código existente, geralmente usando abstrações (interfaces ou classes abstratas).
 
 Exemplo: Adicionar um novo tipo de cálculo sem alterar a lógica já existente.
+<br>
+
+```java
+public class CalculadoraDeDesconto {
+
+    // Qualquer novo tipo de desconto exige a modificação deste método (violação do OCP).
+    public double calcularDesconto(String tipoDesconto, double valor) {
+        if ("porcentagem".equals(tipoDesconto)) {
+            return valor * 0.1; // 10% de desconto
+        } else if ("fixo".equals(tipoDesconto)) {
+            return valor - 50; // Desconto fixo de R$50
+        }
+        return valor; // Sem desconto
+    }
+}
+```
+
+Vamos utilizar abstração para permitir a extensão sem alterar o código base:
+
+```java
+// Interface para estratégias de desconto
+public interface Desconto {
+    double aplicarDesconto(double valor);
+}
+
+// Implementação de desconto por porcentagem
+public class DescontoPorcentagem implements Desconto {
+    @Override
+    public double aplicarDesconto(double valor) {
+        return valor * 0.9; // 10% de desconto
+    }
+}
+
+// Implementação de desconto fixo
+public class DescontoFixo implements Desconto {
+    @Override
+    public double aplicarDesconto(double valor) {
+        return valor - 50; // Desconto fixo de R$50
+    }
+}
+
+// Classe principal que utiliza as estratégias
+public class CalculadoraDeDesconto {
+    public double calcular(Desconto desconto, double valor) {
+        return desconto.aplicarDesconto(valor);
+    }
+}
+
+// Exemplo de uso
+public class SistemaDeDescontos {
+    public static void main(String[] args) {
+        CalculadoraDeDesconto calculadora = new CalculadoraDeDesconto();
+
+        Desconto descontoPorcentagem = new DescontoPorcentagem();
+        Desconto descontoFixo = new DescontoFixo();
+
+        double valor = 500;
+
+        System.out.println("Desconto porcentagem: " + calculadora.calcular(descontoPorcentagem, valor));
+        System.out.println("Desconto fixo: " + calculadora.calcular(descontoFixo, valor));
+    }
+}
+```
+
+**Como isso segue o OCP?**
+- **Extensível**: Para adicionar um novo tipo de desconto (ex.: "Desconto Sazonal"), basta criar uma nova classe que implemente a interface `Desconto`. Não há necessidade de modificar o código existente.
+
+```java
+public class DescontoSazonal implements Desconto {
+    @Override
+    public double aplicarDesconto(double valor) {
+        return valor * 0.8; // 20% de desconto
+    }
+}
+```
+
+- **Modularidade**: Cada tipo de desconto é independente, o que facilita testes e manutenção.
+- **Reutilização**: As classes podem ser usadas em diferentes partes do sistema, sem dependências desnecessárias.
 
 ### L - Liskov Substitution Principle (LSP)
 Uma subclasse deve ser substituível por sua classe base sem alterar o comportamento esperado do programa.
